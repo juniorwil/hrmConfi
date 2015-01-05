@@ -1,0 +1,100 @@
+<?php echo $this->render('layout/titulo') ?>
+
+<?php
+$form = $this->form;
+$form->prepare();
+
+$form->setAttributes(array(
+    'action' => $this->url.$this->lin.'a',
+    'method' => 'post'
+));
+// Get the form label plugin
+$formLabel = $this->plugin('formLabel');
+// Abriendo etiqueta del formulario
+echo $this->form()->openTag($form);
+?>
+<div class="control-group">
+<?php
+    $name = $form->get('nombre');
+    echo $formLabel->openTag().$name->getOption('label');
+    echo $formLabel->closeTag();
+    echo $this->formInput($name);
+    echo $this->formElementErrors($name);
+?>
+</div>    
+<div class="control-group">    
+<?php    
+    $name = $form->get('id');
+    echo $this->formInput($name);    
+?>    
+</div>
+<?php
+  $name = $form->get('cantidad');
+  echo $formLabel->openTag()."Porcentaje";
+  echo $formLabel->closeTag();   
+  $name->setAttribute("type","number");
+  $name->setAttribute("name",'cantidad');
+  $name->setAttribute("id","cantidad");
+  $name->setAttribute("class",'variables');
+  $name->setAttribute("pattern",'[0-9]+');
+  $name->setAttribute("step",'any');
+  $name->setAttribute("min",'0'); 
+  $name->setAttribute("required",'required'); 
+  echo $this->formInput($name); 
+?>  
+<hr />
+<strong>Alertas en porcentajes de descuento</strong>
+<hr />
+<?php
+  echo $this->render('layout/rojo');
+  $name = $form->get('ancho');
+  echo $formLabel->openTag()."Critico :";
+  echo $formLabel->closeTag();   
+  $name->setAttribute("type","number");
+  $name->setAttribute("name",'ancho');
+  $name->setAttribute("id","ancho");
+  $name->setAttribute("class",'variables');
+  $name->setAttribute("pattern",'[0-9]+');
+  $name->setAttribute("step",'any');
+  $name->setAttribute("min",'0'); 
+  $name->setAttribute("required",'required'); 
+  echo $this->formInput($name); 
+?>  
+<hr />
+<?php
+  echo $this->render('layout/amarillo');
+  $name = $form->get('ancho');
+  echo $formLabel->openTag()."Regular :";
+  echo $formLabel->closeTag();   
+  $name->setAttribute("type","number");
+  $name->setAttribute("name",'anchoA');
+  $name->setAttribute("id","anchoA");
+  $name->setAttribute("class",'variables');
+  $name->setAttribute("pattern",'[0-9]+');
+  $name->setAttribute("step",'any');
+  $name->setAttribute("min",'0'); 
+  $name->setAttribute("required",'required'); 
+  echo $this->formInput($name); 
+?>  
+<hr />
+<?php
+  echo $this->render('layout/rojo');
+  $name = $form->get('ancho');
+  echo $formLabel->openTag()."Aceptable :";
+  echo $formLabel->closeTag();   
+  $name->setAttribute("type","number");
+  $name->setAttribute("name",'anchoV');
+  $name->setAttribute("id","anchoV");
+  $name->setAttribute("class",'variables');
+  $name->setAttribute("pattern",'[0-9]+');
+  $name->setAttribute("step",'any');
+  $name->setAttribute("min",'0'); 
+  $name->setAttribute("required",'required'); 
+  echo $this->formInput($name); 
+?>  
+<div class="form-actions">    
+  <?php echo $this->formElement($form->get('send')) ?>
+</div>    
+<?php echo $this->form()->closeTag() ?>
+
+<?php echo $this->render('layout/iregresar') ?>    

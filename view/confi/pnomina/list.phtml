@@ -1,0 +1,32 @@
+<?php echo $this->render('layout/titulo') ?>
+
+<a href="<?php echo $this->basePath() ?><?php echo $this->lin?>a"><?php echo $this->render('layout/inuevo') ?></a>
+<div id="dialog"></div>
+
+<?php echo $this->render('layout/tabla_c') ?>
+
+    <?php foreach ($this->datos as $dato){ ?>
+        <tr>
+            <td><?php echo $dato["id"] ?></td>
+            <td><?php echo $dato["nombre"] ?></td>
+            <td><?php echo $dato["formula"] ?></td>
+            <td><?php 
+            if ( $dato["valorNum"] > 0) 
+                 echo number_format( $dato["valorNum"] ) ?></td>            
+            <td>
+                <a href="<?php echo $this->basePath() ?><?php echo $this->lin?>a/<?php echo $dato["id"]?>"> <?php echo $this->render('layout/ieditar') ?> </a>
+            </td>
+            <td>
+              <?php if ( $dato["fijo"] == 0 ) { ?>
+                <a href="<?php echo $this->basePath() ?><?php echo $this->lin?>d/<?php echo $dato["id"]?>"> <?php echo $this->render('layout/ieliminar') ?> </a>
+              <?php } ?>  
+            </td>            
+        </tr>
+    <?php } ?>
+        
+<?php echo $this->render('layout/tabla_p') ?>
+        
+<?php 
+$this->ncol='null,null,null,null,';
+echo $this->render('layout/tabla_tb') ?>        
+    

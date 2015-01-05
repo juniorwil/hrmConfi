@@ -1,0 +1,54 @@
+<?php
+$form = $this->form;
+$form->prepare();
+
+$form->setAttributes(array(
+    'action' => $this->url.$this->lin.'a',
+    'method' => 'post'
+));
+// Get the form label plugin
+$formLabel = $this->plugin('formLabel');
+// Abriendo etiqueta del formulario
+echo $this->form()->openTag($form);
+?>
+<div class="form_element">
+<?php
+    $select = $form->get('idM');
+    echo $formLabel->openTag().'Opción';
+    echo $formLabel->closeTag();
+    echo $this->formSelect($select);
+    echo $this->formElementErrors($select);
+?>
+</div>
+<?php echo $this->form()->closeTag() ?>
+
+<script>
+$(function () {
+
+  // Nivel 3
+  $("#idM").change(function () {
+    var a = $("#id").val();
+    var b = $("#tipo").val();
+    var c = $("#idM").val();     
+           var parametros = {
+                "id1"  : a,                
+                "id2"  : b,                
+                "id3"  : c,                
+              }; 
+            $.ajax({
+                data:  parametros,
+                url:   '<?php echo $this->basePath() ?><?php echo $this->lin?>o',
+                type:  'post',
+                beforeSend: function () {
+                    $("#resultado2").html('<h3 class="header smaller lighter grey"><i class="icon-spinner icon-spin orange bigger-125"></i></h3>Por favor espere...');
+                },
+               success:  function (response) {
+                    $("#resultado2").html(response);                    
+               }
+             });          
+     })
+  })
+
+</script>
+
+<div id="resultado2"></div>

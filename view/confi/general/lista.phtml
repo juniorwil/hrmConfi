@@ -1,0 +1,86 @@
+<?php echo $this->render('layout/titulo') ?>
+
+<?php
+$form = $this->form;
+$form->prepare();
+
+$form->setAttributes(array(
+    'action' => $this->url.$this->lin.'a',
+    'method' => 'post'
+));
+// Get the form label plugin
+$formLabel = $this->plugin('formLabel');
+// Abriendo etiqueta del formulario
+echo $this->form()->openTag($form);
+?>
+<div class="row">
+<div class="col-sm-4">
+<?php
+    $name = $form->get('nombre');
+    echo $formLabel->openTag()." Empresa: ";
+    echo $formLabel->closeTag();
+    echo $this->formInput($name);
+    echo $this->formElementErrors($name);
+?>
+</div>
+<div class="col-sm-4">    
+<?php
+    $name = $form->get('nit');
+    echo $formLabel->openTag()." Nit: ";
+    echo $formLabel->closeTag();
+    echo $this->formInput($name);
+    echo $this->formElementErrors($name);
+?>
+</div>
+</div>    
+<hr />
+<div class="row">
+<div class="col-sm-4">
+    <strong>Logo de la compañia:</strong>
+
+<img alt="" src="<?php echo $this->basePath() ?>/Datos/General/<?php echo $this->logo ?>" />    
+
+   <?php $fileElement = $form->get('image-file'); ?>
+        <?php echo $this->formLabel($fileElement); ?>
+        <?php echo $this->formFile($fileElement); ?>
+   <?php echo $this->formElementErrors($fileElement); ?>                                                                                                        
+</div>
+</div>    
+<hr />
+<div class="row">
+<div class="col-sm-8">
+<?php
+    $name = $form->get('dir');
+    echo $formLabel->openTag()." Ruta madre para subida de archivos: ";
+    echo $formLabel->closeTag();
+    echo $this->formInput($name);
+    echo $this->formElementErrors($name);
+?>
+</div>
+</div>
+<hr />
+
+Tener en cuenta el día 31 para disfrute de vacaciones
+<?php
+    $select = $form->get('check1');
+    echo $this->formCheckbox($select);
+?><span class="lbl"></span>     
+<hr />
+Manejo de escala salarial
+<?php
+    $select = $form->get('check2');
+    echo $this->formCheckbox($select);
+?><span class="lbl"></span>      
+      
+<div class="control-group">    
+<?php    
+    $name = $form->get('id');
+    echo $this->formInput($name);    
+?>    
+</div>
+<div class="form-actions">    
+  <?php echo $this->formElement($form->get('send')) ?>
+</div>    
+<?php echo $this->form()->closeTag() ?>
+
+<?php echo $this->render('layout/iregresar') ?>    

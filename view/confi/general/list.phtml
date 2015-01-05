@@ -1,0 +1,31 @@
+<?php echo $this->render('layout/titulo') ?>
+
+<a href="<?php echo $this->basePath() ?><?php echo $this->lin?>a"><?php echo $this->render('layout/inuevo') ?></a>
+<div id="dialog"></div>
+
+<?php echo $this->render('layout/tabla_c') ?>
+       <tr>
+            <td>Definiciones en el aplicativo</td>
+            <td>
+                <a href="<?php echo $this->basePath() ?><?php echo $this->lin?>a/1"> <?php echo $this->render('layout/ieditar') ?> </a>
+            </td>
+            
+        </tr>
+        <tr>
+            <td>Definición del calendario festivo</td>
+            <td>
+                <a href="<?php echo $this->basePath() ?><?php echo $this->lin?>c"> <?php echo $this->render('layout/icalendar') ?> </a>
+            </td>        
+        </tr>
+        <tr>
+            <td>Definición de los dias habiles</td>
+            <td>
+                <a href="<?php echo $this->basePath() ?><?php echo $this->lin?>h"> <?php echo $this->render('layout/icalendar') ?> </a>
+            </td>        
+        </tr>        
+<?php echo $this->render('layout/tabla_p') ?>
+        
+<?php 
+$this->ncol='';
+echo $this->render('layout/tabla_tb') ?>        
+    

@@ -1,0 +1,2 @@
+[10-Oct-2014 07:09:04 America/Chicago] PHP Fatal error:  Using $this when not in object context in /home/tecnolog/public_html/nis/module/Confi/view/confi/roles/index.phtml on line 1
+[16-Nov-2014 10:59:15 America/Chicago] PHP Fatal error:  Using $this when not in object context in /home/tecnolog/public_html/nis/module/Confi/view/confi/roles/index.phtml on line 1
