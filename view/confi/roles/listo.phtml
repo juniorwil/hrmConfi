@@ -3,15 +3,17 @@ $form = $this->form;
 $form->prepare();
 
 $form->setAttributes(array(
-    'action' => $this->url.$this->lin.'a',
+    'action' => $this->url.$this->lin.'o/'.$this->id,
     'method' => 'post'
 ));
 // Get the form label plugin
 $formLabel = $this->plugin('formLabel');
 // Abriendo etiqueta del formulario
 echo $this->form()->openTag($form);
+    $name = $form->get('id');
+    echo $this->formInput($name);    
+
 ?>
-<?php echo $this->form()->closeTag() ?>
 
 <h3 class="header smaller lighter blue">Opciones de menu</h3>
 
@@ -19,31 +21,35 @@ echo $this->form()->openTag($form);
 
     <?php foreach ($this->datos as $dato){ ?>
         <tr>
-            <td><?php echo $dato["nomM2"] ?></td>
+            <td><?php echo $dato["nombre"] ?></td>
             <td><?php
                    $select = $form->get('check1');
-                   $select->setAttribute("id",'n_'.$dato["idM2"]); 
+                   $select->setAttribute("id",'n_'.$dato["id"]); 
+                   $select->setAttribute("name",'n_'.$dato["id"]); 
                    $select->setAttribute("value",$dato["nuevo"]);                    
                    echo $this->formCheckbox($select);
                    ?><span class="lbl"></span>
             </td>
             <td><?php
                    $select = $form->get('check1');
-                   $select->setAttribute("id",'m_'.$dato["idM2"]); 
+                   $select->setAttribute("id",'m_'.$dato["id"]); 
+                   $select->setAttribute("name",'m_'.$dato["id"]); 
                    $select->setAttribute("value",$dato["modificar"]);                    
                    echo $this->formCheckbox($select);
                    ?><span class="lbl"></span>
             </td>
             <td><?php
                    $select = $form->get('check1');
-                   $select->setAttribute("id",'e_'.$dato["idM2"]); 
+                   $select->setAttribute("id",'e_'.$dato["id"]); 
+                   $select->setAttribute("name",'e_'.$dato["id"]); 
                    $select->setAttribute("value",$dato["eliminar"]);                    
                    echo $this->formCheckbox($select);
                    ?><span class="lbl"></span>
             </td>            
             <td><?php
                    $select = $form->get('check1');
-                   $select->setAttribute("id",'a_'.$dato["idM2"]); 
+                   $select->setAttribute("id",'a_'.$dato["id"]); 
+                   $select->setAttribute("name",'a_'.$dato["id"]); 
                    $select->setAttribute("value",$dato["aprobar"]);                    
                    echo $this->formCheckbox($select);
                    ?><span class="lbl"></span>
@@ -53,45 +59,8 @@ echo $this->form()->openTag($form);
         
 <?php echo $this->render('layout/tabla_p') ?>
         
-<script>
-$(function (){
-  // Recorrer las clases de check para verificar estado del permiso
-  $('.check').click(function(){
-      
-    var a = $("#id").val();
-    var b = $("#tipo").val();
-    var c = $("#idM").val();        
-    var ida = $(this).attr('id');
-    var permiso = 0    
-    if($("#"+ida).is(':checked')) 
-       {
-          permiso = 1
-       }else{ 
-          permiso = 0
-       }        
-       var parametros = {
-                "idrol"    : a,                
-                "permiso"  : permiso,                
-                "idm1"     : b,               
-                "idm2"     : c,               
-                "idm3"     : ida,               
-              }; 
-       $.ajax({
-                data:  parametros,
-                url:   '<?php echo $this->basePath() ?><?php echo $this->lin?>og',
-                type:  'post',
-                success:  function (response) {
-                    alert('Guardado')
-               }
-       }); // FIn ajax                       
-  });// Fin clic check
-})
-</script>
 
-<div id="resultado3"></div>
-        
-        
-<?php 
-$this->ncol='null,null,null,';
-echo $this->render('layout/tabla_tb') ?>        
-    
+<div class="form-actions">    
+  <?php echo $this->formElement($form->get('send')) ?>
+</div>    
+<?php echo $this->form()->closeTag() ?>

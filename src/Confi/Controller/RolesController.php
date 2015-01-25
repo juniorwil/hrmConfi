@@ -99,195 +99,110 @@ class RolesController extends AbstractActionController
          return new ViewModel($valores);
       }
    } // Fin actualizar datos
+
+
+    public function listnAction()
+    {
+        
+        $form = new Formulario("form");
+        $this->dbAdapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
+        $d=new AlbumTable($this->dbAdapter);
+        $valores=array
+        (
+            "titulo"    =>  $this->tlis,
+            "daPer"     =>  $d->getPermisos($this->lin), // Permisos de esta opcion
+            "datArb"    =>  $d->getGeneral("select a.id , a.nombre , b.id as idM1, b.nombre as nomMod1  
+                                     ,c.id as idM2, c.nombre as nomMod2  
+                                         from c_mu a 
+                                         inner join c_mu1 b on b.idM = a.id
+                                         inner join c_mu2 c on c.idM1 = b.id order by a.id, b.id, c.id"), 
+            "ttablas"   =>  $this->ttab,
+            "form"      => $form,
+            "lin"       =>  $this->lin,
+            'url'       => $this->getRequest()->getBaseUrl(),
+            "flashMessages" => $this->flashMessenger()->getMessages(), // Mensaje de guardado
+        );                       
+
+        return new ViewModel($valores);
+        
+    } // Fin listar registros 
    
-   // Eliminar dato ********************************************************************************************
-   public function listdAction() 
-   {
-      $id = (int) $this->params()->fromRoute('id', 0);
-      if ($id > 0)
-         {
-            $this->dbAdapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
-            $u=new Roles($this->dbAdapter);  // ---------------------------------------------------------- 5 FUNCION DENTRO DEL MODELO (C)         
-            $u->delRegistro($id);
-            return $this->redirect()->toUrl($this->getRequest()->getBaseUrl().$this->lin);
-          }
-          
-   }
-   //----------------------------------------------------------------------------------------------------------
-   //----------------------------------------------------------------------------------------------------------
-   // FUNCIONES ADICIONALES GUARDADO DE ITEMS   
-     
-   // Listado de items de la etapa **************************************************************************************
-   public function listiAction()
-   {
-      $form = new Formulario("form");
-      $id = (int) $this->params()->fromRoute('id', 0);
-      $form->get("id")->setAttribute("value",$id);
-      $this->dbAdapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
-      $d = New AlbumTable($this->dbAdapter);      
-
-      // Modulos asociados
-      $arreglo='';
-      $datos = $d->getGeneral('select * from c_mu order by nombre'); 
-      foreach ($datos as $dat){
-         $idc=$dat['id'];$nom=$dat['nombre'];
-         $arreglo[$idc]= $nom;
-      }              
-      $form->get("tipo")->setValueOptions($arreglo);                                                       
-      
-      if($this->getRequest()->isPost()) 
-      {
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            // Zona de validacion del fomrulario  --------------------
-            $album = new ValFormulario();
-            $form->setInputFilter($album->getInputFilter());            
-            $form->setData($request->getPost());           
-            $form->setValidationGroup('nombre'); // ------------------------------------- 2 CAMPOS A VALDIAR DEL FORMULARIO  (C)            
-            // Fin validacion de formulario ---------------------------
-            if ($form->isValid()) {
-                $this->dbAdapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
-                $u    = new Modulo2($this->dbAdapter);// ------------------------------------------------- 3 FUNCION DENTRO DEL MODELO (C)  
-                $data = $this->request->getPost();                
-               // print_r($data);
-                $u->actRegistro($data,$id);
-                return $this->redirect()->toUrl($this->getRequest()->getBaseUrl().$this->lin.'i/'.$data->id);
-            }
-        }
-      }      
-
-      $valores=array
-      (
-           "titulo"    =>  'Opciones del rol',
-           "datos"     =>  $d->getGeneral("Select * , CONCAT( modelo ,'/', controlador ,'/', vista ) as link from c_mu2
-                                           where idM1=".$id." order by nombre"),// Listado de formularios            
-           "ttablas"   =>  'Opción, Link , Eliminar',
-           'url'       =>  $this->getRequest()->getBaseUrl(),
-           "form"      =>  $form,
-           "lin"       =>  $this->lin
-       );                
-       return new ViewModel($valores);        
-   } // Fin listar registros items 
-
-   // Opciones ver modulos
-   public function listpAction()
-   {
-      if($this->getRequest()->isPost()) 
-      {
-        $request = $this->getRequest();
-        if ($request->isPost()) 
-            {   
-              $form = new Formulario("form");
-              $this->dbAdapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
-              $d = New AlbumTable($this->dbAdapter);                    
-              $data = $this->request->getPost();  
-              $id1 = $data->id1;
-              $id2 = $data->id2;
-              // Modulos asociados
-              $arreglo='';
-              $datos = $d->getGeneral('select * from c_mu1 where idM='.$id2); 
-              foreach ($datos as $dat){
-                $idc=$dat['id'];$nom=$dat['nombre'];
-                $arreglo[$idc]= $nom;
-              }
-              if ($arreglo!='')
-                 $form->get("idM")->setValueOptions($arreglo);                                                                     
-              
-              $valores=array
-              (
-                 'url'       =>  $this->getRequest()->getBaseUrl(),
-                 "form"      =>  $form,
-                 "lin"       =>  $this->lin
-              );             
-             $view = new ViewModel($valores);        
-             $this->layout('layout/blanco'); // Layout del login
-             return $view;              
-            }
-      }
-    
-   } // Fin listar registros items   
-
    // Opciones ver modulos
    public function listoAction()
    {
-      if($this->getRequest()->isPost()) 
-      {
-        $request = $this->getRequest();
-        if ($request->isPost()) 
-            {   
-              $form = new Formulario("form");
-              $this->dbAdapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
-              $d = New AlbumTable($this->dbAdapter);                    
-              $data = $this->request->getPost();  
-              $id1 = $data->id1;
-              $id2 = $data->id2;
-              $id3 = $data->id3;
-              print_r($data);
-              $valores=array
-              (
-                 "titulo"    =>  'Opciones del rol',
-                 "datos"     =>  $d->getGeneral("select a.idM2 , b.nombre as nomM2, a.nuevo, a.modificar, a.eliminar, a.aprobar 
-                                      from c_roles_o a 
-                                      inner join c_mu2 b on b.id=a.idM3  where a.idRol=".$id1."  and a.idM2= ".$id3."
-                                 union all
-                                      select a.id as idM2, a.nombre as nomM2,
-                                      0 as nuevo,
-                                      0 as modificar,
-                                      0 as eliminar,
-                                      0 as aprobar
-                                      from c_mu2 a 
-                                      inner join c_mu1 b on a.idM1=b.id
-                                      where not exists (select null from c_roles_o 
-                                      where idM2=a.idM1 and idM3=a.id and idRol=".$id1." ) and a.idM1=".$id3."  "),// Listado de formularios            
-                 "ttablas"   =>  'Opcion, Nuevo, Modificar, Eliminar, Aprobar',
-                 'url'       =>  $this->getRequest()->getBaseUrl(),
-                 "form"      =>  $form,
-                 "lin"       =>  $this->lin
-              );             
-             $view = new ViewModel($valores);        
-             $this->layout('layout/blanco'); // Layout del login
-             return $view;              
-            }
-      }
-    
-   } // Fin listar registros items      
 
-   // guardar o eliminar opciones  
-   public function listogAction() 
-   {
+      $form = new Formulario("form");
+      $this->dbAdapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
+      $d = New AlbumTable($this->dbAdapter);                    
+      $id = (int) $this->params()->fromRoute('id', 0);
+      
       if($this->getRequest()->isPost()) // Actulizar datos
       {
         $request = $this->getRequest();
         if ($request->isPost()) {       
            $this->dbAdapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
-           $d = New Roles1($this->dbAdapter);      
-           $data = $this->request->getPost();
-           // Verificar si existe opcion ya guardada
-           $u = New AlbumTable($this->dbAdapter);              
-           $idm3=substr( $data->idm3 , 2, 5 );
-           $dat = $u->getGeneral1("select count(idRol) as registro from c_roles_o a where idRol=".$data->idrol." and idM1=".$data->idm1
-                   ." and idM2=".$data->idm2." and idM3=".$idm3);           
            
-           $d->actRegistro($data, $dat['registro']);      
+           $u = New AlbumTable($this->dbAdapter);              
+           $data = $this->request->getPost();
+
+           $u->modGeneral("delete from c_roles_o where idRol=".$data->id );           
+           $datos =  $d->getGeneral("select a.id, a.nombre, case when b.idM3 is null then 0 else b.id end as idM3,
+                                         case when b.nuevo is null then 0 else b.nuevo end as nuevo,
+                                         case when b.modificar is null then 0 else b.modificar end as modificar,
+                                         case when b.eliminar is null then 0 else b.eliminar end as eliminar, 0 as aprobar  
+                                         from c_mu3 a
+                                         left join c_roles_o b on b.idM3 = a.id 
+                                         where a.idM2 = ".$data->id);// Listado de formularios                       
+           foreach ($datos as $dato)
+           {
+               $idLc = $dato['id'];
+               $n = '$data->n_'.$idLc; // Nuevo
+               eval("\$n = $n;");    
+
+               $m = '$data->m_'.$idLc; // Modificar
+               eval("\$m = $m;");             
+
+               $e = '$data->e_'.$idLc; // Eliminar
+               eval("\$e = $e;");             
+
+               $a = '$data->a_'.$idLc; // Aprobar
+               eval("\$a = $a;");                            
+
+               if ( ( $n > 0 ) or ( $m > 0 ) or ( $e > 0 ) or ( $e > 0 ) )   
+                  $u->modGeneral("insert into c_roles_o (idRol, idM3, nuevo, modificar, eliminar, aprobar)
+                      values(".$data->id.",".$idLc.",".$n.",".$m.",".$e.",".$a.")" );           
+           }
+           $id = $data->id;
+           // Verificar si existe opcion ya guardada           
         }
+      }else{
+          $lon = strlen($id); 
+          $id = substr( $id, 0, $lon-1 ); // Para quitar el ultimo digito , por problemas con el 0
+          $form->get("id")->setAttribute("value",$id); 
+
       }
-   }
+      $datos =  $d->getGeneral("select a.id, a.nombre, case when b.idM3 is null then 0 else b.id end as idM3,
+                                         case when b.nuevo is null then 0 else b.nuevo end as nuevo,
+                                         case when b.modificar is null then 0 else b.modificar end as modificar,
+                                         case when b.eliminar is null then 0 else b.eliminar end as eliminar, 0 as aprobar  
+                                         from c_mu3 a
+                                         left join c_roles_o b on b.idM3 = a.id 
+                                         where a.idM2 = ".$id);// Listado de formularios            
+      $valores=array
+      (
+         "titulo"    =>  'Opciones del rol',
+         "datos"     =>  $datos,// Listado de formularios            
+         "ttablas"   =>  'Opcion, Nuevo, Modificar, Eliminar, Aprobar',
+         'url'       =>  $this->getRequest()->getBaseUrl(),
+         "form"      =>  $form,
+         "id"        =>  $id,
+         "lin"       =>  $this->lin
+      );             
+      $view = new ViewModel($valores);        
+      $this->layout('layout/blancoI'); // Layout del login
+      return $view;              
    
-   // Eliminar dato ********************************************************************************************
-   public function listidAction() 
-   {
-      $id = (int) $this->params()->fromRoute('id', 0);
-      if ($id > 0)
-         {
-            $this->dbAdapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
-            $u=new Modulo2($this->dbAdapter);  // ---------------------------------------------------------- 5 FUNCION DENTRO DEL MODELO (C)         
-            $d = New AlbumTable($this->dbAdapter);  
-            // bucar id de parametro
-            $datos = $d->getGeneral1("select idM1 from c_mu2 where id=".$id);// Listado de formularios                                
-            $u->delRegistro($id);
-            return $this->redirect()->toUrl($this->getRequest()->getBaseUrl().$this->lin.'i/'.$datos['idM1']);
-          }          
-   }// Fin eliminar datos
-   
-   
+   } // Fin listar registros items
+
+
 }

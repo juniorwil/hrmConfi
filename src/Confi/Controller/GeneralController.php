@@ -273,5 +273,56 @@ class GeneralController extends AbstractActionController
        );                
        return new ViewModel($valores);        
    } // Fin dias habiles   
-   
+
+
+   // Incapacidades *********************************************************************************************
+   public function listiAction() 
+   { 
+      $form = new Formulario("form");
+      //  valores iniciales formulario   (C)
+      $id = (int) $this->params()->fromRoute('id', 0);
+      $form->get("id")->setAttribute("value",$id);                       
+      // Niveles de aspectos
+      $this->dbAdapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
+      // ------------------------ Fin valores del formulario       
+      if($this->getRequest()->isPost()) // Actulizar datos
+      {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            // Zona de validacion del fomrulario  --------------------
+            $album = new ValFormulario();
+            $form->setInputFilter($album->getInputFilter());            
+            $form->setData($request->getPost());           
+            $form->setValidationGroup('id'); // ------------------------------------- 2 CAMPOS A VALDIAR DEL FORMULARIO  (C)            
+            // Fin validacion de formulario ---------------------------
+            if ($form->isValid()) {
+                $this->dbAdapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
+                $data = $this->request->getPost();                
+                $d    = new AlbumTable($this->dbAdapter);// ------------------------------------------------- 3 FUNCION DENTRO DEL MODELO (C)                  
+                $d->modGeneral("update c_general set incAtrasada=".$data->check2.", incReintegro=".$data->check2);
+                return $this->redirect()->toUrl($this->getRequest()->getBaseUrl().$this->lin.'i/'.$data->id);
+            }
+        }
+        
+    }else{              
+      if ($id > 0) // Cuando ya hay un registro asociado
+         {
+            $this->dbAdapter=$this->getServiceLocator()->get('Zend\Db\Adapter');
+            $u=new General($this->dbAdapter); // ---------------------------------------------------------- 4 FUNCION DENTRO DEL MODELO (C)          
+            $datos = $u->getRegistroId($id);
+            // Valores guardados
+            $form->get("check1")->setAttribute("value",$datos['incAtrasada']); 
+            $form->get("check2")->setAttribute("value",$datos['incReintegro']); 
+         }            
+         $valores=array
+         (
+            "titulo"  => "De las incapacidades",
+            "form"    => $form,
+            'url'     => $this->getRequest()->getBaseUrl(),
+            'id'      => $id,
+            "lin"     => $this->lin
+         );                
+         return new ViewModel($valores);
+      }
+   } // Fin incapacidades   
 }

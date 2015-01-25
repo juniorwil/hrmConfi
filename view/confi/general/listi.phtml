@@ -5,7 +5,7 @@ $form = $this->form;
 $form->prepare();
 
 $form->setAttributes(array(
-    'action' => $this->url.$this->lin.'a',
+    'action' => $this->url.$this->lin.'i/1',
     'method' => 'post'
 ));
 // Get the form label plugin
@@ -13,15 +13,19 @@ $formLabel = $this->plugin('formLabel');
 // Abriendo etiqueta del formulario
 echo $this->form()->openTag($form);
 ?>
-<div class="row">    
-<div class="col-sm-4">Nombre:<br />
+
+Pagar días no reportados
 <?php
-    $name = $form->get('nombre');
-    echo $this->formInput($name);
-    echo $this->formElementErrors($name);
-?>
-</div>    
-</div>    
+    $select = $form->get('check1');
+    echo $this->formCheckbox($select);
+?><span class="lbl"></span>     
+<hr />
+Restar días conceptos asumidos por la empresa
+<?php
+    $select = $form->get('check2');
+    echo $this->formCheckbox($select);
+?><span class="lbl"></span>      
+      
 <div class="control-group">    
 <?php    
     $name = $form->get('id');

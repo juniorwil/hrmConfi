@@ -3,7 +3,7 @@ $form = $this->form;
 $form->prepare();
 
 $form->setAttributes(array(
-    'action' => $this->url.$this->lin.'a',
+    'action' => $this->url.$this->lin.'o/'.$this->id,
     'method' => 'post'
 ));
 // Get the form label plugin
@@ -11,7 +11,8 @@ $formLabel = $this->plugin('formLabel');
 // Abriendo etiqueta del formulario
 echo $this->form()->openTag($form);
 ?>
-<div class="form_element">
+<div class="row">    
+<div class="col-sm-4">Nombre:<br />
 <?php
     $select = $form->get('idM');
     echo $formLabel->openTag().'Opción';
@@ -19,6 +20,7 @@ echo $this->form()->openTag($form);
     echo $this->formSelect($select);
     echo $this->formElementErrors($select);
 ?>
+</div>
 </div>
 <?php echo $this->form()->closeTag() ?>
 

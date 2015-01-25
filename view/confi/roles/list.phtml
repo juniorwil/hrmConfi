@@ -1,7 +1,6 @@
 <?php echo $this->render('layout/titulo') ?>
 
 <a href="<?php echo $this->basePath() ?><?php echo $this->lin?>a"><?php echo $this->render('layout/inuevo') ?></a>
-<div id="dialog"></div>
 
 <?php echo $this->render('layout/tabla_c') ?>
 
@@ -9,7 +8,7 @@
         <tr>
             <td><?php echo $dato["nombre"] ?></td>
             <td>
-                <a href="<?php echo $this->basePath() ?><?php echo $this->lin?>i/<?php echo $dato["id"]?>"> <?php echo $this->render('layout/iitems') ?> </a>                         
+                <a href="<?php echo $this->basePath() ?><?php echo $this->lin?>n/<?php echo $dato["id"]?>"> <?php echo $this->render('layout/iitems') ?> </a>                         
             </td>                                        
             <td>
                 <a href="<?php echo $this->basePath() ?><?php echo $this->lin?>a/<?php echo $dato["id"]?>"> <?php echo $this->render('layout/ieditar') ?> </a>
